@@ -1,8 +1,8 @@
 
 // lines (layers)
 const legendSettings = [{ color: '#4292C6', key: 'LS', title: 'Low Stress', checked: true},
-{ color: '#F16913', key: 'HS', title: 'High Stress', checked: true},
-{ key: 'desig', title: 'Bike Designated Only', checked: true}]
+{ color: '#F16913', key: 'HS', title: 'High Stress', checked: true}]
+//{ key: 'desig', title: 'Bike Designated Only', checked: true}]
 
 const layerSettings = [{key: 'LSdesig', color: '#4292C6', url: 'data/design_low_stress.json'},
 {key: 'HSdesig', color: '#F16913', url: 'data/design_high_stress.json'},
@@ -21,13 +21,13 @@ var legendChecks = {}; //dictionary of legend checkbox ids(keys) and their state
 var layers = {};  //dictionary of layers with keys from settings
 
 // Create variable to hold map element, give initial settings to map
-var centerCoord = [49.27857, -122.79942] 
+var centerCoord = [49.206385, -122.894179] 
 if (L.Browser.mobile) {
   // increase tolerance for tapping (it was hard to tap on line exactly), zoom out a bit, and remove zoom control
   var myRenderer = L.canvas({ padding: 0.1, tolerance: 5 });
-  var map = L.map("map", { center: centerCoord, zoom: 11, renderer: myRenderer, zoomControl: false });
+  var map = L.map("map", { center: centerCoord, zoom: 10, renderer: myRenderer, zoomControl: false });
 } else {
-  var map = L.map("map", { center: centerCoord, zoom: 12 });
+  var map = L.map("map", { center: centerCoord, zoom: 11 });
 }
 L.tileLayer(
   'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -142,6 +142,9 @@ function toggleLayer(checkbox) {
       legendChecks[checkbox.id] = false 
   }
 
+  // van map hack
+  legendChecks['desig'] = true
+
   layerGroup.clearLayers()
   if (legendChecks['LS'] == true)
   {
@@ -180,6 +183,10 @@ function addLayers() {
     // add to global layers dictionary
     layers[setting.key] = ltsLayer
   }
+
+  // van map hack
+  legendChecks['desig'] = true
+
   if (legendChecks['LS'] == true)
   {
     if (legendChecks['desig'] == true){
